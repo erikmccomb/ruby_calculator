@@ -4,8 +4,8 @@ require 'colorize'
 @calc = []
 
 def first_num
-  puts 'What is the first number?'.colorize(:green)
-  puts 'Any letter entered will become 0.'.colorize(:yellow)
+  puts 'What is the first number?'.colorize(:yellow)
+  puts 'Any letter entered will become 0.'.colorize(:blue)
   @calc << gets.to_i
 
   operator
@@ -13,34 +13,42 @@ end
 
 def operator
   puts 'Select an operator:'.colorize(:green)
-  puts '1) +'.colorize(:green)
-  puts '2) -'.colorize(:green)
-  puts '3) *'.colorize(:green)
-  puts '4) /'.colorize(:green)
-  puts '5) Square'
-  puts '6) square root'
-  puts '7) Raise to the power of'
-  @oper = gets.to_i
+  puts '+'.colorize(:green)
+  puts '-'.colorize(:green)
+  puts '*'.colorize(:green)
+  puts '/'.colorize(:green)
+  puts 'Squared'.colorize(:green)
+  puts 'Square root'.colorize(:green)
+  puts 'Power of'.colorize(:green)
+  @oper = gets.strip.downcase
   sec_num
 end
 
 def sec_num
-  puts 'What is the second number?'.colorize(:green)
-  puts 'Any letter entered will become 0.'.colorize(:yellow)
-  @calc << gets.strip.to_i
-  answer
+  case @oper
+    when '+', '-', '*', '/','power of'
+      puts 'What is the second number?'.colorize(:yellow)
+      puts 'Any letter entered will become 0.'.colorize(:blue)
+      @calc << gets.strip.to_i
+      answer
+    when 'squared', 'square root'
+      answer
+    else
+      puts 'Error in operation; please try again.'.colorize(:red)
+      calculator
+  end
 end
 
 def calculation
   case @oper
-    when 1
+    when "+"
       # binding.pry
-      @result = @calc[0].to_i + @calc[1].to_i
-    when 2
-      @result = @calc[0].to_i - @calc[1].to_i
-    when 3
-      @result = @calc[0].to_i * @calc[1].to_i
-    when 4
+      @result = @calc[0] + @calc[1]
+    when "-"
+      @result = @calc[0] - @calc[1]
+    when "*"
+      @result = @calc[0] * @calc[1]
+    when "/"
       if @calc[1] == 0
         puts 'Invalid entry for the second number'.colorize(:red)
         @calc = []
@@ -49,12 +57,12 @@ def calculation
       else
       @result = @calc[0].to_i / @calc[1].to_i
       end
-    when 5
-
-    when 6
-
-    when 7
-      
+    when 'squared'
+      @result = @calc[0] ** 2
+    when 'square root'
+      @result = @calc[0] ** 0.5
+    when 'power of'
+      @result = @calc[0] ** @calc[1]
     else 
       puts 'Error in operation; please try again.'.colorize(:red)
       calculator
@@ -69,8 +77,19 @@ def answer
   puts 'Calculating ...'.colorize(:yellow)
   puts ''
   calculation
-  puts "#{@calc[0]} #{@oper} #{@calc[1]} = #{@result}".colorize(:green)
-  puts ''
+  case @oper
+    when '+', '-', '*', '/'
+      puts "#{@calc[0]} #{@oper} #{@calc[1]} = #{@result}".colorize(:green)
+      puts ''
+    when 'squared', 'square root'
+      puts "#{@calc[0]} #{@oper} = #{@result}"
+      puts ''
+    when 'power of'
+      puts "#{@calc[0]} to the power of #{@calc[1]} = #{@result}"
+    else
+      puts 'Error in operation; please try again.'.colorize(:red)
+      calculator
+  end
   @kept = @result
   @calc = []
   @oper = []
